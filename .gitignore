@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Ignore Folder ###
-front-end
+env.properties
