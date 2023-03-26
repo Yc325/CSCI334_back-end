@@ -48,8 +48,6 @@ public class AutController {
             HashMap<String, String> jwtToken =  new HashMap<String, String>();
             jwtToken.put("token",jwtUtil.generateToken(user));
             return ResponseEntity.ok()
-//                    .body()
-////                    .body(jwtUtil.generateToken(user));
                     .header(
                             HttpHeaders.AUTHORIZATION,
                             jwtUtil.generateToken(user)
