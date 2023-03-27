@@ -17,7 +17,6 @@ public class User implements UserDetails {
     private Long id;
     private LocalDate accountCreatedAt;
     private String username;
-    @JsonIgnore
     private String password;
 
     @OneToMany( fetch = FetchType.EAGER, mappedBy = "user")

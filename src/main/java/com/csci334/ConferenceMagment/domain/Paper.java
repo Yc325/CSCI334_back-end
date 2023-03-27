@@ -14,6 +14,9 @@ public class Paper {
     private double score;
     private String status;
 
+    private Boolean ConferenceManagementDecision = null;
+
+
     @OneToMany(cascade=CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
     @ManyToMany(cascade=CascadeType.ALL)
@@ -26,7 +29,13 @@ public class Paper {
     private File file;
 
 
+    public Boolean getConferenceManagementDecision() {
+        return ConferenceManagementDecision;
+    }
 
+    public void setConferenceManagementDecision(Boolean conferenceManagementDecision) {
+        ConferenceManagementDecision = conferenceManagementDecision;
+    }
 
     public File getFile() {
         return file;

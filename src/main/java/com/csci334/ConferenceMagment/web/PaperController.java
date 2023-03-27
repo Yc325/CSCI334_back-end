@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -89,6 +90,12 @@ public class PaperController {
         header.setContentLength(file.getData().length);
         header.set("Content-Disposition", "attachment; filename=" + file.getFileName());
         return new ResponseEntity<>(file.getData(), header, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPapers(@AuthenticationPrincipal User user){
+        List<Paper> paperList = paperService.getAllPapers();
+        return ResponseEntity.ok(paperList);
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -64,6 +65,10 @@ public class PaperService {
         paper.setName(fileName.getFileName().split("\\.")[0]);
         paper.setStatus("Submitted");
         return paper;
+    }
+
+    public List<Paper> getAllPapers(){
+        return paperRepository.findAll();
     }
 
 }
