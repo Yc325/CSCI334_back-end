@@ -22,8 +22,8 @@ public class Paper {
     @ManyToMany(cascade=CascadeType.ALL)
     private List<User> authors = new ArrayList<>();
 
-    @OneToMany(cascade=CascadeType.ALL)
-    private List<User> reviewer = new ArrayList<>();
+    @ManyToMany(cascade=CascadeType.ALL)
+    private List<User> reviewers = new ArrayList<>();
 
     @ManyToOne(cascade=CascadeType.ALL)
     private File file;
@@ -45,24 +45,25 @@ public class Paper {
         this.file = file;
     }
 
-    public List<User> getReviewer() {
-        return reviewer;
+    public List<User> getReviewers() {
+        return reviewers;
     }
 
-    public void setReviewer(List<User> reviewer) {
-        this.reviewer = reviewer;
+    public void setReviewers(List<User> reviewer) {
+        this.reviewers = reviewer;
     }
 
     public void addAuthor(User user){
         authors.add(user);
     }
 
-    public void addComment(Comment comment){
-        comments.add(comment);
+    public void addReviewer(User user){
+        reviewers.add(user);
     }
 
-    public void addReviewer(User user){
-        reviewer.add(user);
+
+    public void addComment(Comment comment){
+        comments.add(comment);
     }
 
     public List<Comment> getComments() {

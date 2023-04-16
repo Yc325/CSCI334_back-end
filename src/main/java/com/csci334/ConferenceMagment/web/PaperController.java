@@ -7,7 +7,6 @@ import com.csci334.ConferenceMagment.payload.Response;
 import com.csci334.ConferenceMagment.service.FileService;
 import com.csci334.ConferenceMagment.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,16 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import org.springframework.core.io.Resource;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/papers")
@@ -37,6 +35,8 @@ public class PaperController {
     @Autowired
     private FileService fileService;
 
+
+    ///REST REQ POST
     @PostMapping("")
     public ResponseEntity<?> createPaper(@AuthenticationPrincipal User user){
         Paper newPaper = paperService.save(user);
@@ -55,18 +55,11 @@ public class PaperController {
         return ResponseEntity.ok(paper);
     }
 
-
-    @GetMapping("")
-    public ResponseEntity<?> getPapers(@AuthenticationPrincipal User user){
-       return ResponseEntity.ok(paperService.findByAuthors(user));
-
+    @PostMapping("{paperid}/addreviewer/{username}")
+    public ResponseEntity<?> addReviewer(@PathVariable Long paperid, @PathVariable String username, @AuthenticationPrincipal User user){
+        Paper paper = paperService.addReviewerToPaper(paperid,username);
+        return ResponseEntity.ok(paper);
     }
-    @GetMapping("{paperId}")
-    public ResponseEntity<?> getPaper(@PathVariable Long paperId, @AuthenticationPrincipal User user){
-        Optional<Paper> paper = paperService.findById(paperId);
-        return ResponseEntity.ok(paper.orElse(new Paper()));
-    }
-
 
     @PostMapping("/uploadFile")
     public Response uploadFile(@RequestParam MultipartFile file){
@@ -77,6 +70,23 @@ public class PaperController {
                 .path(fileName.getFileName())
                 .toUriString();
         return new Response(fileName.getFileName(), fileDowloadUri,file.getContentType(), file.getSize());
+    }
+
+    ///REST REQ GET
+    @GetMapping("")
+    public ResponseEntity<?> getPapers(@AuthenticationPrincipal User user){
+       return ResponseEntity.ok(paperService.findByAuthors(user));
+    }
+
+    @GetMapping("reviewer")
+    public ResponseEntity<?> getPapersReviewer(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok(paperService.findByReviewers(user));
+    }
+
+    @GetMapping("{paperId}")
+    public ResponseEntity<?> getPaper(@PathVariable Long paperId, @AuthenticationPrincipal User user){
+        Optional<Paper> paper = paperService.findById(paperId);
+        return ResponseEntity.ok(paper.orElse(new Paper()));
     }
 
     @GetMapping("/dowloadFile/{fileId:.+}")
@@ -96,6 +106,64 @@ public class PaperController {
     public ResponseEntity<?> getAllPapers(@AuthenticationPrincipal User user){
         List<Paper> paperList = paperService.getAllPapers();
         return ResponseEntity.ok(paperList);
+    }
+
+    @GetMapping("/reviwers")
+    public ResponseEntity<?> getAllAuthorityNumber(){
+
+        //Get all Reviewers
+        Set<User> listReviewers = paperService.getAllReviwers();
+        //get size of Reviewers
+        int sizeReviewers = listReviewers.size();
+
+        //Get all submitted papers
+        Set<Paper> listSubmittedPapers = paperService.getAllSubmittedPapers();
+        //get size of papers
+        int sizePapers = listSubmittedPapers.size();
+
+
+        //Equal division of paper per author
+        int equalDivisionPerPaper = sizePapers/2; //should be 3
+        //Equal division of paper per author
+        int equalDivisionPerReviewer = sizeReviewers/2; //should be 1
+
+        int counterAssigendPapers = 0;
+
+        List<Object> users = new ArrayList<>();
+        List<Object> papers = new ArrayList<>();
+
+
+        //Assigning Reviewers
+        for(int i = 0; i<sizeReviewers; i++){
+            //Set Users
+
+            users.add(listReviewers.toArray()[i]);
+            User user = (User) users.get(i); // cast the first element in users to a User object
+
+            //That's a counter that counts how many papers were assigned
+            int counter_paper = 0;
+
+            if (i >= equalDivisionPerReviewer){
+                counterAssigendPapers = equalDivisionPerPaper;
+            }
+
+            //Assigning Papers
+            for (int j = counterAssigendPapers; j < sizePapers; j++){
+                counter_paper +=1;
+
+                papers.add(listSubmittedPapers.toArray()[j]);
+                Paper paper = (Paper) papers.get(j);
+
+
+                //assign paper to reviewer
+                paperService.authoAddReviwerTopaper(paper,user);
+
+                if (counter_paper == equalDivisionPerPaper){
+                    break;
+                }
+            }
+        }
+        return ResponseEntity.ok(equalDivisionPerReviewer);
     }
 
 }

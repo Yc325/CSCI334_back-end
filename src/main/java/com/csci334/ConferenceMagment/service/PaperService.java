@@ -45,9 +45,23 @@ public class PaperService {
         return paperRepository.save(paper);
     }
 
+    public Paper addReviewerToPaper(Long paperId,String username){
+        User reviewer = userRepository.findByUsername(username).orElseThrow(()-> new userNotFoundException(username));
+        Paper paper = getPaper(paperId);
+        paper.addReviewer(reviewer);
+        return paperRepository.save(paper);
+    }
+    public Paper authoAddReviwerTopaper(Paper paper, User user){
+        paper.addReviewer(user);
+        return paperRepository.save(paper);
+    }
 
     public Set<Paper> findByAuthors(User user){
         return paperRepository.findByAuthors(user);
+    }
+
+    public Set<Paper> findByReviewers(User user){
+        return paperRepository.findByReviewers(user);
     }
 
     public Optional<Paper> findById(Long paperId) {
@@ -71,4 +85,11 @@ public class PaperService {
         return paperRepository.findAll();
     }
 
+    public Set<User> getAllReviwers(){
+        return userRepository.findByReviwer();
+    }
+
+    public Set<Paper> getAllSubmittedPapers(){
+        return paperRepository.findSubmittedPapers();
+    }
 }
