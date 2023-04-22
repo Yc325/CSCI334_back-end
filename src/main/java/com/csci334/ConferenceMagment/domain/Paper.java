@@ -1,5 +1,7 @@
 package com.csci334.ConferenceMagment.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +13,10 @@ public class Paper {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private double score;
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Score> scores = new ArrayList<>();
     private String status;
-
     private Boolean ConferenceManagementDecision = null;
 
 
@@ -61,6 +64,10 @@ public class Paper {
         reviewers.add(user);
     }
 
+//    public void addScore(Score paperscore){
+//        scores.add(paperscore);
+//    }
+
 
     public void addComment(Comment comment){
         comments.add(comment);
@@ -98,13 +105,10 @@ public class Paper {
         this.name = name;
     }
 
-    public double getScore() {
-        return score;
-    }
+//    public List<Score> getScore() {
+//        return scores;
+//    }
 
-    public void setScore(double score) {
-        this.score = score;
-    }
 
     public String getStatus() {
         return status;

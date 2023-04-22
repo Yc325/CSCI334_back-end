@@ -6,6 +6,7 @@ import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.domain.exception.PaperNotFoundException;
 import com.csci334.ConferenceMagment.domain.exception.userNotFoundException;
 import com.csci334.ConferenceMagment.repository.PaperRepository;
+import com.csci334.ConferenceMagment.repository.ScoreRepository;
 import com.csci334.ConferenceMagment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class PaperService {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    ScoreRepository scoreRepository;
 
     public Paper save(User user) {
         User author = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new userNotFoundException(user.getUsername()));

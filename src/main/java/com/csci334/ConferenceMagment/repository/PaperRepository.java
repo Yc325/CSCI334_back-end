@@ -17,4 +17,5 @@ public interface PaperRepository extends JpaRepository<Paper,Long> {
  @Query("select p from Paper p where p.status='Submitted'")
  Set<Paper> findSubmittedPapers();
 
+
 }
