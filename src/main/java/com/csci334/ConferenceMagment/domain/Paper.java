@@ -1,7 +1,5 @@
 package com.csci334.ConferenceMagment.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +18,8 @@ public class Paper {
     private Boolean ConferenceManagementDecision = null;
 
 
-    @OneToMany(cascade=CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+//    @OneToMany(cascade=CascadeType.ALL)
+//    private List<Comment> comments = new ArrayList<>();
     @ManyToMany(cascade=CascadeType.ALL)
     private List<User> authors = new ArrayList<>();
 
@@ -69,17 +67,17 @@ public class Paper {
 //    }
 
 
-    public void addComment(Comment comment){
-        comments.add(comment);
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
+//    public void addComment(Comment comment){
+//        comments.add(comment);
+//    }
+//
+//    public List<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(List<Comment> comments) {
+//        this.comments = comments;
+//    }
 
     public List<User> getAuthors() {
         return authors;
