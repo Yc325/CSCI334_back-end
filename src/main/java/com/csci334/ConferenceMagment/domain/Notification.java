@@ -12,9 +12,32 @@ public class Notification {
     @OneToOne
     private Paper paper;
     @OneToOne
-    private User confChair;
+    private User sender;
     @OneToOne
-    private User author;
+    private User receiver;
+
+    private String msg;
+    private LocalDate date;
+
+    private Boolean status = false;
+
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public Paper getPaper() {
         return paper;
@@ -24,7 +47,7 @@ public class Notification {
         this.paper = paper;
     }
 
-    private LocalDate date;
+
 
     public Long getId() {
         return id;
@@ -34,20 +57,20 @@ public class Notification {
         this.id = id;
     }
 
-    public User getConfChair() {
-        return confChair;
+    public User getSender() {
+        return sender;
     }
 
-    public void setConfChair(User confChair) {
-        this.confChair = confChair;
+    public void setSender(User confChair) {
+        this.sender = confChair;
     }
 
-    public User getAuthor() {
-        return author;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setReceiver(User author) {
+        this.receiver = author;
     }
 
     public LocalDate getDate() {
@@ -58,9 +81,11 @@ public class Notification {
         this.date = date;
     }
 
+    public String getMsg() {
+        return msg;
+    }
 
-
-
-
-
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 }

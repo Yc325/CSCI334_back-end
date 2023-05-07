@@ -23,8 +23,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Authority> authorities = new ArrayList<>();
 
-    //TODO: Create Role: ADMIN, AUTHOR, REVIEWER, CONF CHAIR
-
     public Long getId() {
         return id;
     }
@@ -85,5 +83,16 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", accountCreatedAt=" + accountCreatedAt +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

@@ -43,6 +43,13 @@ public class PaperController {
         return ResponseEntity.ok(newPaper);
     }
 
+    @PutMapping("{paperId}")
+    public ResponseEntity<?> makeDecision(@PathVariable Long paperId, @RequestParam Boolean decision,@AuthenticationPrincipal User user){
+        paperService.makeDecision(paperId,decision,user);
+        return ResponseEntity.noContent().build();
+    }
+
+
     @PostMapping("{paperId}")
     public ResponseEntity<?> uploadFileToPaper(@PathVariable Long paperId, @RequestParam MultipartFile file, @AuthenticationPrincipal User user){
         Paper paper  = paperService.addFile(paperId,file);

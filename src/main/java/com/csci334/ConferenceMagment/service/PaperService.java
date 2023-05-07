@@ -1,10 +1,12 @@
 package com.csci334.ConferenceMagment.service;
 
 import com.csci334.ConferenceMagment.domain.File;
+import com.csci334.ConferenceMagment.domain.Notification;
 import com.csci334.ConferenceMagment.domain.Paper;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.domain.exception.PaperNotFoundException;
 import com.csci334.ConferenceMagment.domain.exception.userNotFoundException;
+import com.csci334.ConferenceMagment.repository.NotificationRepository;
 import com.csci334.ConferenceMagment.repository.PaperRepository;
 import com.csci334.ConferenceMagment.repository.ScoreRepository;
 import com.csci334.ConferenceMagment.repository.UserRepository;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,6 +36,10 @@ public class PaperService {
 
     @Autowired
     ScoreRepository scoreRepository;
+
+
+    @Autowired
+    NotificationRepository notificationRepository;
 
     public Paper save(User user) {
         User author = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new userNotFoundException(user.getUsername()));
@@ -95,5 +103,31 @@ public class PaperService {
 
     public Set<Paper> getAllSubmittedPapers(){
         return paperRepository.findSubmittedPapers();
+    }
+
+    public void makeDecision(Long paperId, Boolean decision, User user) {
+        Paper paper = getPaper(paperId);
+        paper.setConferenceManagementDecision(decision);
+        paperRepository.save(paper);
+
+        // Send notification
+
+        List<User> authors = paper.getAuthors();
+        int sizeAuthors = authors.size();
+
+        for(int i = 0; i<sizeAuthors; i++){
+            User newUser = authors.get(i);
+            Notification notification = new Notification();
+            notification.setSender(user);
+            notification.setDate(LocalDate.from(LocalDateTime.now()));
+            notification.setMsg("Decision has been made");
+            notification.setPaper(paper);
+            notification.setReceiver(newUser);
+            notification.setType("Conference Decision");
+            notificationRepository.save(notification);
+
+        }
+
+
     }
 }
