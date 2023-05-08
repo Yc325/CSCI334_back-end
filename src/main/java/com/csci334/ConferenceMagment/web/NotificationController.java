@@ -1,6 +1,6 @@
 package com.csci334.ConferenceMagment.web;
 
-import com.csci334.ConferenceMagment.domain.Notification;
+import com.csci334.ConferenceMagment.domain.builderPattern.Notification;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

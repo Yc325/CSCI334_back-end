@@ -1,14 +1,12 @@
 package com.csci334.ConferenceMagment.service;
 
-import com.csci334.ConferenceMagment.domain.Notification;
+import com.csci334.ConferenceMagment.domain.builderPattern.Notification;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.domain.exception.NotificationNotFoundException;
-import com.csci334.ConferenceMagment.domain.exception.PaperNotFoundException;
 import com.csci334.ConferenceMagment.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service

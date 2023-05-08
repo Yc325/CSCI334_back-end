@@ -1,7 +1,10 @@
 package com.csci334.ConferenceMagment.service;
 
 import com.csci334.ConferenceMagment.domain.File;
-import com.csci334.ConferenceMagment.domain.Notification;
+import com.csci334.ConferenceMagment.domain.IteratorPattern.PatterIterator;
+import com.csci334.ConferenceMagment.domain.IteratorPattern.PatternAggregate;
+import com.csci334.ConferenceMagment.domain.IteratorPattern.PatternAggregateImlp;
+import com.csci334.ConferenceMagment.domain.builderPattern.*;
 import com.csci334.ConferenceMagment.domain.Paper;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.domain.exception.PaperNotFoundException;
@@ -18,26 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PaperService {
 
     @Autowired
     private PaperRepository paperRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private FileService fileService;
 
     @Autowired
     ScoreRepository scoreRepository;
-
-
     @Autowired
     NotificationRepository notificationRepository;
 
@@ -117,17 +114,38 @@ public class PaperService {
 
         for(int i = 0; i<sizeAuthors; i++){
             User newUser = authors.get(i);
-            Notification notification = new Notification();
-            notification.setSender(user);
-            notification.setDate(LocalDate.from(LocalDateTime.now()));
-            notification.setMsg("Decision has been made");
-            notification.setPaper(paper);
-            notification.setReceiver(newUser);
-            notification.setType("Conference Decision");
+            BuildNotification decisionNotification = new DecisionNotification(newUser,paper,user);
+            ConstractorNotification notificationComment = new ConstractorNotification(decisionNotification);
+            Notification notification = notificationComment.constructNotification();
             notificationRepository.save(notification);
-
         }
+    }
 
+
+    public void bidPaper(Long paperId, User user) {
+        Paper paper = getPaper(paperId);
+
+        PatternAggregate listAllReviwers = new PatternAggregateImlp();
+        listAllReviwers.addPatterns(new ArrayList<>(getAllReviwers()));
+
+        PatternAggregate AssignedReviwers = new PatternAggregateImlp();
+        AssignedReviwers.addPatterns(paper.getReviewers());
+
+        PatterIterator patterIteratorListAllReviewers = listAllReviwers.getPatternIterator();
+
+        while(!patterIteratorListAllReviewers.isLastPattern()){
+            User reviewer = patterIteratorListAllReviewers.nextPattern();
+            if(reviewer.getId() == user.getId()){
+                listAllReviwers.removePattern(reviewer);
+                AssignedReviwers.removePattern(reviewer);
+                break;
+            }
+        }
+        PatterIterator patterIteratorListAllReviewers1 = listAllReviwers.getPatternIterator();
+        User addedUser = patterIteratorListAllReviewers1.getRandomUser();
+        AssignedReviwers.addPattern(addedUser);
+        paper.setReviewers(AssignedReviwers.getAllPatterns());
+        paperRepository.save(paper);
 
     }
 }

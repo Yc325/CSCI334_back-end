@@ -1,6 +1,6 @@
 package com.csci334.ConferenceMagment.repository;
 
-import com.csci334.ConferenceMagment.domain.Notification;
+import com.csci334.ConferenceMagment.domain.builderPattern.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

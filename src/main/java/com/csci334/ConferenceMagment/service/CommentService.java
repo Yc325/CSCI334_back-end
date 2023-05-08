@@ -1,7 +1,10 @@
 package com.csci334.ConferenceMagment.service;
 
 import com.csci334.ConferenceMagment.domain.Comment;
-import com.csci334.ConferenceMagment.domain.Notification;
+import com.csci334.ConferenceMagment.domain.builderPattern.BuildNotification;
+import com.csci334.ConferenceMagment.domain.builderPattern.CommentNotification;
+import com.csci334.ConferenceMagment.domain.builderPattern.ConstractorNotification;
+import com.csci334.ConferenceMagment.domain.builderPattern.Notification;
 import com.csci334.ConferenceMagment.domain.Paper;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.dto.CommentDto;
@@ -44,13 +47,9 @@ public class CommentService {
 
         for(int i = 0; i<sizeAuthors; i++){
             User newUser = authors.get(i);
-            Notification notification = new Notification();
-            notification.setSender(user);
-            notification.setDate(LocalDate.from(LocalDateTime.now()));
-            notification.setMsg(comment.getComment());
-            notification.setPaper(paper);
-            notification.setReceiver(newUser);
-            notification.setType("Comment");
+            BuildNotification commentNotification = new CommentNotification(newUser,comment.getComment(),paper,user);
+            ConstractorNotification notificationComment = new ConstractorNotification(commentNotification);
+            Notification notification = notificationComment.constructNotification();
             notificationRepository.save(notification);
 
         }

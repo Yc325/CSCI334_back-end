@@ -49,6 +49,12 @@ public class PaperController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("")
+    public ResponseEntity<?> bidPaper(@RequestParam Long paperId, @AuthenticationPrincipal User user){
+        paperService.bidPaper(paperId,user);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PostMapping("{paperId}")
     public ResponseEntity<?> uploadFileToPaper(@PathVariable Long paperId, @RequestParam MultipartFile file, @AuthenticationPrincipal User user){

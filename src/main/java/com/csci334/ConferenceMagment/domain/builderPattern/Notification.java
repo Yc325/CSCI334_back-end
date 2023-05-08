@@ -1,4 +1,7 @@
-package com.csci334.ConferenceMagment.domain;
+package com.csci334.ConferenceMagment.domain.builderPattern;
+
+import com.csci334.ConferenceMagment.domain.Paper;
+import com.csci334.ConferenceMagment.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
