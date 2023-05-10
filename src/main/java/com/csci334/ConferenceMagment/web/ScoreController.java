@@ -38,7 +38,13 @@ public class ScoreController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllScore( @AuthenticationPrincipal User user) {
-        Set<Score> allScores = scoreService.getAllScores(user);
+        Set<Score> allScores = scoreService.getAllScoresByUser(user);
+        return ResponseEntity.ok(allScores);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllScoreBypaper(@RequestParam Long paperId, @AuthenticationPrincipal User user){
+        Set<Score> allScores = scoreService.getALlScoresByPaperId(paperId);
         return ResponseEntity.ok(allScores);
     }
 }

@@ -18,4 +18,7 @@ public interface ScoreRepository extends JpaRepository<Score,Long> {
     Double getAvarageByPaper(Long paperId);
 
     Set<Score> findByReviwer(User user);
+
+    @Query("select u from Score u where u.paper.id = ?1")
+    Set<Score> findbyPaperId(Long paperId);
 }

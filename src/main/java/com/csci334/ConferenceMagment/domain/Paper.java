@@ -115,4 +115,17 @@ public class Paper {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Paper{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", ConferenceManagementDecision=" + ConferenceManagementDecision +
+                ", authors=" + authors +
+                ", reviewers=" + reviewers +
+                ", file=" + file +
+                '}';
+    }
 }

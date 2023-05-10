@@ -57,7 +57,12 @@ public class ScoreService {
         }
     }
 
-    public Set<Score> getAllScores(User user){
+    public Set<Score> getAllScoresByUser(User user){
         return scoreRepository.findByReviwer(user);
+    }
+
+    public Set<Score> getALlScoresByPaperId(Long paperId) {
+        return scoreRepository.findbyPaperId(paperId);
+
     }
 }

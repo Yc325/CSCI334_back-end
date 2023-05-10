@@ -127,31 +127,29 @@ public class PaperController {
         //Get all Reviewers
         Set<User> listReviewers = paperService.getAllReviwers();
         //get size of Reviewers
-        int sizeReviewers = listReviewers.size();
+        int sizeReviewers = listReviewers.size(); //current number is 4
 
         //Get all submitted papers
-        Set<Paper> listSubmittedPapers = paperService.getAllSubmittedPapers();
+        Set<Paper> listSubmittedPapers = paperService.getAllSubmittedPapers(); //current number is 4
         //get size of papers
         int sizePapers = listSubmittedPapers.size();
 
 
         //Equal division of paper per author
-        int equalDivisionPerPaper = sizePapers/2; //should be 3
+        int equalDivisionPerPaper = sizePapers/2; //should be 2
         //Equal division of paper per author
-        int equalDivisionPerReviewer = sizeReviewers/2; //should be 1
+        int equalDivisionPerReviewer = sizeReviewers/2; //should be 2
 
         int counterAssigendPapers = 0;
 
-        List<Object> users = new ArrayList<>();
-        List<Object> papers = new ArrayList<>();
+        List<User> users = new ArrayList<User>(listReviewers);
+        List<Paper> papers = new ArrayList<Paper>(listSubmittedPapers);
 
 
         //Assigning Reviewers
         for(int i = 0; i<sizeReviewers; i++){
             //Set Users
-
-            users.add(listReviewers.toArray()[i]);
-            User user = (User) users.get(i); // cast the first element in users to a User object
+            User user = users.get(i);
 
             //That's a counter that counts how many papers were assigned
             int counter_paper = 0;
@@ -164,8 +162,7 @@ public class PaperController {
             for (int j = counterAssigendPapers; j < sizePapers; j++){
                 counter_paper +=1;
 
-                papers.add(listSubmittedPapers.toArray()[j]);
-                Paper paper = (Paper) papers.get(j);
+                Paper paper = papers.get(j);
 
 
                 //assign paper to reviewer
