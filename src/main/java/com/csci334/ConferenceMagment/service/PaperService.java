@@ -14,13 +14,13 @@ import com.csci334.ConferenceMagment.repository.PaperRepository;
 import com.csci334.ConferenceMagment.repository.ScoreRepository;
 import com.csci334.ConferenceMagment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -37,6 +37,20 @@ public class PaperService {
     ScoreRepository scoreRepository;
     @Autowired
     NotificationRepository notificationRepository;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public void sendEmail(String email,
+                          String subject,
+                          String body){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("cheerepninyuri@gmail.com");
+        message.setTo(email);
+        message.setText(body);
+        message.setSubject(subject);
+        mailSender.send(message);
+    }
 
     public Paper save(User user) {
         User author = userRepository.findByUsername(user.getUsername()).orElseThrow(()-> new userNotFoundException(user.getUsername()));
@@ -117,6 +131,13 @@ public class PaperService {
             BuildNotification decisionNotification = new DecisionNotification(newUser,paper,user);
             ConstractorNotification notificationComment = new ConstractorNotification(decisionNotification);
             Notification notification = notificationComment.constructNotification();
+            String body = "Dear " + newUser.getUsername() + "\nWe hope you are doing well.\n"
+                    + "Your paper has been decided by " + user.getUsername() +"\n"
+                    + "Paper ID : " + paper.getId() +"\n"
+                    + "To check your decision please log in to the system\n\n"
+                    +"\n Best Regards\n Conference Management Tool";
+            String subject = notification.getType() + " " + paper.getId();
+            sendEmail(newUser.getEmail(),subject,body);
             notificationRepository.save(notification);
         }
     }

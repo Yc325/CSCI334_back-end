@@ -29,6 +29,7 @@ public class UserService {
         User newUser = new User();
         newUser.setAccountCreatedAt(date);
         newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(newUser);
 
