@@ -9,12 +9,13 @@ import com.csci334.ConferenceMagment.domain.Paper;
 import com.csci334.ConferenceMagment.domain.User;
 import com.csci334.ConferenceMagment.domain.exception.PaperNotFoundException;
 import com.csci334.ConferenceMagment.domain.exception.userNotFoundException;
+import com.csci334.ConferenceMagment.domain.observer.EmailDecision;
+import com.csci334.ConferenceMagment.domain.observer.Observer;
 import com.csci334.ConferenceMagment.repository.NotificationRepository;
 import com.csci334.ConferenceMagment.repository.PaperRepository;
 import com.csci334.ConferenceMagment.repository.ScoreRepository;
 import com.csci334.ConferenceMagment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +42,15 @@ public class PaperService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String email,
-                          String subject,
-                          String body){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("cheerepninyuri@gmail.com");
-        message.setTo(email);
-        message.setText(body);
-        message.setSubject(subject);
-        mailSender.send(message);
+    private List<Observer> obs = new ArrayList<>();
+
+    public void inform(){
+        for (Observer ob: obs){
+            mailSender.send(ob.sendNotifcation());
+        }
+    }
+    public void addObserver(Observer observer){
+        obs.add(observer);
     }
 
     public Paper save(User user) {
@@ -131,15 +132,15 @@ public class PaperService {
             BuildNotification decisionNotification = new DecisionNotification(newUser,paper,user);
             ConstractorNotification notificationComment = new ConstractorNotification(decisionNotification);
             Notification notification = notificationComment.constructNotification();
-            String body = "Dear " + newUser.getUsername() + "\nWe hope you are doing well.\n"
-                    + "Your paper has been decided by " + user.getUsername() +"\n"
-                    + "Paper ID : " + paper.getId() +"\n"
-                    + "To check your decision please log in to the system\n\n"
-                    +"\n Best Regards\n Conference Management Tool";
-            String subject = notification.getType() + " " + paper.getId();
-            sendEmail(newUser.getEmail(),subject,body);
             notificationRepository.save(notification);
+            addObserver(new EmailDecision(
+                    newUser.getUsername(),
+                    paper.getId(),
+                    notification.getType(),
+                    newUser.getEmail(),
+                    user.getUsername()));
         }
+        inform();
     }
 
 

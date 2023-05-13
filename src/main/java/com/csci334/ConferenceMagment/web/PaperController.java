@@ -122,7 +122,7 @@ public class PaperController {
     }
 
     @GetMapping("/reviwers")
-    public ResponseEntity<?> getAllAuthorityNumber(){
+    public ResponseEntity<?> AutoAssign(){
 
         //Get all Reviewers
         Set<User> listReviewers = paperService.getAllReviwers();

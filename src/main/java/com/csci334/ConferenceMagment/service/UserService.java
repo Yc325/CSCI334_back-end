@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-
 @Service
 public class UserService {
     @Autowired

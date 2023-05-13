@@ -39,7 +39,6 @@ public class CommentService {
         comment.setPaper(paper);
         comment.setPostedAt(LocalDate.from(LocalDateTime.now()));
 
-
         // Send notification
 
         List<User> authors = paper.getAuthors();
