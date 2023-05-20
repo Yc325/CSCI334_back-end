@@ -87,6 +87,18 @@ public class PaperService {
     public Set<Paper> findByReviewers(User user){
         return paperRepository.findByReviewers(user);
     }
+    public Boolean findByReviewersBool(User user, Long paperID) {
+        Set<Paper> AssginedPapers = paperRepository.findByReviewers(user);
+        for (Paper p :AssginedPapers){
+            if(p.getId()==paperID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
 
     public Optional<Paper> findById(Long paperId) {
         return paperRepository.findById(paperId);
@@ -170,4 +182,6 @@ public class PaperService {
         paperRepository.save(paper);
 
     }
+
+
 }

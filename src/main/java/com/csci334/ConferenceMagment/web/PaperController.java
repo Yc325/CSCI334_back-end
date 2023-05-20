@@ -95,6 +95,10 @@ public class PaperController {
     public ResponseEntity<?> getPapersReviewer(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(paperService.findByReviewers(user));
     }
+    @GetMapping("reviewer/{paperID}")
+    public ResponseEntity<?> getPapersReviewerBool(@PathVariable Long paperID, @AuthenticationPrincipal User user){
+        return ResponseEntity.ok(paperService.findByReviewersBool(user,paperID));
+    }
 
     @GetMapping("{paperId}")
     public ResponseEntity<?> getPaper(@PathVariable Long paperId, @AuthenticationPrincipal User user){

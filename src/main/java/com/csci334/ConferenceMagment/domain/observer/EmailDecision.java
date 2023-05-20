@@ -10,7 +10,6 @@ public class EmailDecision implements Observer {
     private Long paperId;
     private String type;
     private String decisionMaker;
-
     private String sendTo;
 
     public EmailDecision(
